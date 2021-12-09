@@ -1,14 +1,14 @@
+        
         document.fonts.ready.then(function() {
-
             document.getElementById("scrolling-container").addEventListener('scroll', function ( event ) {
-                
+
                 var height = $(document.getElementById("scrolling-container")).scrollTop();
 
 
                 if (height > 885) {
                     document.getElementById("scrolling-container").scrollTop = 885;
                 }
-                
+
                 if (height < 75) {
                     document.getElementById("scrolling-container").scrollTop = 75;
                 }
@@ -42,7 +42,7 @@
 
                 document.getElementsByClassName("sentenceOne")[0].style.color = isSentenceOne ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
                 document.getElementsByClassName("sentenceOne")[1].style.color = isSentenceOne ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                
+
                 document.getElementsByClassName("sentenceTwo")[0].style.color = isSentenceTwo ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
                 document.getElementsByClassName("sentenceTwo")[1].style.color = isSentenceTwo ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
 
@@ -51,7 +51,7 @@
 
                 document.getElementsByClassName("sentenceFour")[0].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
                 document.getElementsByClassName("sentenceFour")[1].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                
+
                 document.getElementsByTagName("a")[1].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
                 document.getElementsByTagName("a")[2].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
                 document.getElementsByTagName("a")[3].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
@@ -67,7 +67,7 @@
                 autoplay: false,
                 path: 'data.json'
             });
-            
+
             animation.state = false
             document.getElementById("bm").addEventListener("click", function() {
                 animation.state = !animation.state
@@ -134,7 +134,7 @@
                 if (isSentenceFour) {
                     document.getElementsByClassName("sentenceFour")[0].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByClassName("sentenceFour")[1].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                    
+
                     document.getElementsByTagName("a")[1].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByTagName("a")[2].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByTagName("a")[3].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
@@ -143,7 +143,7 @@
                 } else {
                     document.getElementsByClassName("sentenceFour")[0].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByClassName("sentenceFour")[1].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
-                    
+
                     document.getElementsByTagName("a")[1].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByTagName("a")[2].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByTagName("a")[3].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
@@ -190,12 +190,12 @@
             }
 
             let mousePos = {x: winsize.width/2, y: winsize.height/2};
-            window.addEventListener('mousemove', ev => mousePos = getMousePos(ev));   
+            window.addEventListener('mousemove', ev => mousePos = getMousePos(ev));
 
 
             const elem = document.querySelector('.content__text');
             const textEl = elem.querySelector('span.content__text-inner');
-            
+
             //console.log ("window width:" + window.innerWidth);
 
             const createBlotterText = () => {
@@ -214,7 +214,7 @@
 
 
                 const material = new Blotter.ChannelLiquidMaterial();
-                
+
                 /* channel effect */
                 material.uniforms.uOffset.value = 0.005;
                 material.uniforms.uRotation.value = 45;
@@ -233,7 +233,7 @@
                     var b = y1 - y2;
                     return Math.sqrt((a * a) + (b * b));
                 }
-                
+
                 /*liquid effect */
 
                 material.uniforms.uSpeed.value = 0.3;  //0.25
@@ -242,7 +242,7 @@
                 const blotter = new Blotter(material, {texts: text});
                 const scope = blotter.forText(text);
                 scope.appendTo(elem);
-                
+
                 scope.on("mousemove", function (mousePosition) {
                     var angle = angleBetweenPointsInDegrees(0.5, 0.5, mousePosition.x, mousePosition.y);
                     var blur = Math.min(0.3, distanceBetweenPoints(0.5, 0.5, mousePosition.x, mousePosition.y));
@@ -250,13 +250,13 @@
                     //scope.material.uniforms.uRotation.value = angle;
                     //scope.material.uniforms.uOffset.value = Math.min(blur,0.01);
                     //console.log(scope.material.uniforms.uOffset.value);
-                    
+
                     });
 
 
                 let lastMousePosition = {x: winsize.width/2, y: winsize.height/2};
                 let volatility = 0;
-                    
+
                     const render = () => {
                         const docScrolls = {left : body.scrollLeft + docEl.scrollLeft, top : body.scrollTop + docEl.scrollTop};
                         const relmousepos = {x : mousePos.x - docScrolls.left, y : mousePos.y - docScrolls.top };
@@ -265,21 +265,35 @@
                         volatility = MathUtils.lerp(volatility, Math.min(MathUtils.lineEq(0.9, 0, 100, 0, 2*mouseDistance),0.9), 0.05);
 
                         material.uniforms.uVolatility.value = 0.05 + (volatility);
-                        
+
                         material.uniforms.uOffset.value = 0.001 + Math.min((volatility / 10),0.1); // 0.5
                         //console.log(material.uniforms.uOffset.value);
                         //console.log("volatility: " + material.uniforms.uVolatility.value);
                         //material.uniforms.uSpeed.value = 0.5 + volatility;
-                        
+
                         lastMousePosition = {x: relmousepos.x, y: relmousepos.y};
                         requestAnimationFrame(render);
                     }
                     requestAnimationFrame(render);
-               
-                
+
+
             };
 
 
             createBlotterText();
 
             });
+            const reSizePage = () => {
+                const width = window.innerWidth;
+                const navBar = document.getElementsByTagName("nav")[0]
+                const backgroundItem = document.getElementById("background-item")
+                calculatePadding = 125 + (width-1792)/2
+                navBar.style.padding = width > 1792 ? `0 ${calculatePadding}px` : '0 7%'
+                backgroundItem.style.padding = width > 1792 ? `0 ${calculatePadding}px ` : '0 7%'
+            }
+            window.addEventListener('resize', function(event) {
+                reSizePage();
+            }, true);
+            reSizePage();
+            
+            
