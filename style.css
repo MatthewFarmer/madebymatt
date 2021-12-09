@@ -94,7 +94,6 @@ nav .links {
   position: fixed;
   left: 0;
   bottom: 0;
-  margin: 0 5%;
   visibility: hidden;
   text-align:center;
   -webkit-overflow-scroll:touch;
@@ -133,7 +132,8 @@ nav .links {
 }
 
 #scrolling-text{ 
-  padding-bottom:80px
+  padding-bottom:80px;
+  padding-left: 0px;
 }
   
 #canvas {
