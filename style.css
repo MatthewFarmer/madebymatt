@@ -6,7 +6,7 @@ body {
   height: 100vh;
 }
 
-#keynote {
+/*#keynote {
   color: rgba(255, 255, 255, 0.4);
   position: fixed;
   font-family: 'SFCompactMedium';
@@ -18,7 +18,7 @@ body {
   right: 0;
   height: 15%;
   z-index: 3;
-}
+}*/
 
 .b-canvas {
   filter: invert(100%);
