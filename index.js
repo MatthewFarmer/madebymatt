@@ -77,8 +77,8 @@
                 document.getElementById("background-item").style.visibility = animation.state ? 'visible' : 'hidden'
                 document.getElementById("canvas").style.filter = !animation.state ? 'blur(0px)' : 'blur(20px)' //100px
                 document.getElementById("darken").style.backgroundColor = !animation.state ? 'rgba(18, 18, 18, 0)' : 'rgba(18, 18, 18, 0.8)'
-                document.getElementById("keynote").style.zIndex = 0;
-                document.getElementById("keynote").style.filter = !animation.state ? 'blur(0px)' : 'blur(4px)' //100px
+                //document.getElementById("keynote").style.zIndex = 0;
+                //document.getElementById("keynote").style.filter = !animation.state ? 'blur(0px)' : 'blur(4px)' //100px
                 //document.getElementById("keynote").style.color = animation.state ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.1)'
 
                 var preHeight = $(document.getElementById("scrolling-container")).scrollTop();
