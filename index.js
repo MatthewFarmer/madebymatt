@@ -77,6 +77,10 @@
                 document.getElementById("background-item").style.visibility = animation.state ? 'visible' : 'hidden'
                 document.getElementById("canvas").style.filter = !animation.state ? 'blur(0px)' : 'blur(20px)' //100px
                 document.getElementById("darken").style.backgroundColor = !animation.state ? 'rgba(18, 18, 18, 0)' : 'rgba(18, 18, 18, 0.8)'
+                document.getElementById("darken").style.zIndex = !animation.state ? 0 : 1;
+                document.getElementById("darken").style.backdropFilter = !animation.state ? 'blur(0px)' : 'blur(10px)'; // Adjust blur amount
+
+                //document.getElementById("darken").style.filter = !animation.state ? 'blur(0px)' : 'blur(20px)';
                 //document.getElementById("keynote").style.zIndex = 0;
                 //document.getElementById("keynote").style.filter = !animation.state ? 'blur(0px)' : 'blur(4px)' //100px
                 //document.getElementById("keynote").style.color = animation.state ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.1)'
@@ -296,6 +300,17 @@
                 calculatePadding = 125 + (width-1792)/2
                 navBar.style.padding = width > 1792 ? `0 ${calculatePadding}px` : '0 7%'
                 backgroundItem.style.padding = width > 1792 ? `0 ${calculatePadding}px ` : '0 7%'
+
+                const cardCarousel = document.getElementById('card-carousel')                
+                cardCarousel.style.margin = width > 1792 ? `0 ${calculatePadding}px` : '0 7%'
+                const cardWidth = width > 1792 ? 462.6+50 : width*0.86 * .3
+
+                const cards = document.getElementsByClassName('card')
+                for (let card of cards) {
+                    card.style.width = `${cardWidth}px`
+                    card.style.margin = width > 1792 ? '0 38.55px' : `${(width*0.86) * 0.025}px`
+                    card.style.height = `${cardWidth / 0.75}px`
+                }
             }
 
 /*
@@ -324,5 +339,48 @@
                 reSizePage();
             }, true);
             reSizePage();
+
+            const carousel = document.getElementById('card-carousel');
+
+// Update the scroll event to detect the centered card and update the active dot
+const cardCarousel = document.getElementById('card-carousel');
+const cards = document.getElementsByClassName('card');
+const dots = document.getElementsByClassName('dot');
+
+cardCarousel.addEventListener('scroll', () => {
+    const scrollLeft = cardCarousel.scrollLeft;
+    const cardWidth = cards[0].offsetWidth + parseFloat(getComputedStyle(cards[0]).marginRight);
+
+    // Calculate the middle index based on the scroll position
+    const middleCardIndex = Math.round(scrollLeft / cardWidth);
+
+    // Update the active dots
+    for (let i = 0; i < dots.length; i++) {
+        // Set the active class based on the middleCardIndex
+        dots[i].classList.toggle('active', i === middleCardIndex); // Adjust for 1-based index
+    }
+});
+
+// Initial update to highlight the correct dot on page load
+dots[0]?.classList.add('active');
+
+document.getElementById('scroll-button').addEventListener('click', () => {
+    const scrollSection = document.getElementById('button-container');
+    scrollSection.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Example JavaScript to add scroll functionality (optional)
+const carouselWrapper = document.querySelector('.carousel-wrapper');
+
+// Scroll to the next set of cards
+function scrollNext() {
+  carouselWrapper.scrollBy({ left: 450, behavior: 'smooth' });
+}
+
+// Scroll to the previous set of cards
+function scrollPrev() {
+  carouselWrapper.scrollBy({ left: -450, behavior: 'smooth' });
+}
+
             
             

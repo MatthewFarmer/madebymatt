@@ -1,9 +1,8 @@
 body {
-  background-color: #161516; /*#121212;*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background-color: #161516; /* Background color */
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+  overflow-x: hidden; /* Hide horizontal overflow on the body */
 }
 
 /*#keynote {
@@ -110,7 +109,7 @@ nav .links {
 
 #background-item{
   z-index: 3;
-  height:540x;
+  height:540px;
   width: 1067px;
   position: fixed;
   left: 0;
@@ -161,6 +160,10 @@ nav .links {
   transition: ease-in-out 0.5s;
   filter: blur(0px);
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }
 
 #darken {
@@ -169,7 +172,6 @@ nav .links {
   width: 100%;
   height: 100%;
   position: fixed;
-  z-index:2;
   top:0px;
   left:0px;
 }
@@ -207,3 +209,154 @@ a {
   text-decoration: none;
   transition: ease-in-out 0.3s;
 }
+#canvasSection {
+  height: 90vh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+#button-container {
+  display: flex;          /* Use flexbox */
+  justify-content: center; /* Center the button horizontally */
+}
+#scroll-button {
+  margin: 0 auto; /* Push button to the bottom */
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: auto; /* Button width will be determined by padding */
+  max-width: 200px; /* Optional: Set a maximum width for the button */
+  align-self: center; /* Center the button horizontally */
+  position: relative;
+  margin: 15px;  /* Add extra space below the button */
+  font-family: 'SFCompactRoundedSemibold';
+  opacity: 0.6;
+
+}
+
+#scroll-container {
+  height: 100vh; /* Full viewport height */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  scroll-snap-type: y mandatory; /* Snap to sections vertically */
+  scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+#canvasSection, #card-section {
+  scroll-snap-align: start; /* Snap to the start of each section */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+@font-face {
+  font-family: 'SFCompactRoundedSemibold';
+  src: url('./SF-Compact-Rounded-Semibold.otf');
+}
+
+@font-face {
+  font-family: 'SFCompactRoundedRegular';
+  src: url('./SF-Compact-Rounded-Regular.otf');
+}
+
+/* Ensure the canvas takes up its natural space */
+#canvas {
+  transition: ease-in-out 0.5s;
+  filter: blur(0px);
+  z-index: 1;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Carousel container (visible area) */
+/* Carousel container (visible area) */
+#card-carousel {
+  height: 700px; /* Optional: Set a height for the carousel */
+  overflow-x: auto; /* Allow horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scrolling */
+  white-space: nowrap; /* Prevent cards from wrapping */
+  scroll-snap-type: x mandatory; /* Enable snapping */
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Carousel wrapper (scrollable area) */
+#carousel-wrapper {
+  display: inline-flex; /* Align items horizontally */
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Pagination Dots */
+#pagination-dots {
+  position: relative; /* Change to relative positioning */
+  margin-top: 10px; /* Add some spacing between carousel and dots */
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* Style for each card */
+.card {
+  /*height: 647px;*/
+  background-color: transparent;
+  overflow: visible;
+  /*box-shadow: 
+    -20px -20px 80px rgba(255, 255, 255, 0.1),
+    40px 40px 80px rgba(0, 0, 0, 0.16);    */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  scroll-snap-align: start; /* Snap to start of the card */
+}
+
+
+
+/* Video inside the card */
+.card video {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Text container below the video */
+.card-text {
+  font-size: 14pt;
+  padding-top: 20px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Title to the left of '|' */
+.card-text .title {
+  font-family: 'SFCompactRoundedSemibold';
+  opacity: 1;
+  margin-right: 5px;
+}
+
+/* Description to the right of '|' */
+.card-text .description {
+  font-family: 'SFCompactRoundedRegular';
+  opacity: 0.6;
+}
+
