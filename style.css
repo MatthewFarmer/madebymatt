@@ -210,7 +210,7 @@ a {
   transition: ease-in-out 0.3s;
 }
 #canvasSection {
-  height: 90vh; 
+  height: calc(100vh - 78px);
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
@@ -223,7 +223,7 @@ a {
   margin: 0 auto; /* Push button to the bottom */
   background-color: transparent;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -231,9 +231,11 @@ a {
   max-width: 200px; /* Optional: Set a maximum width for the button */
   align-self: center; /* Center the button horizontally */
   position: relative;
-  margin: 15px;  /* Add extra space below the button */
+  margin-top: 4px;
+  /*margin: 15px;  /* Add extra space below the button */
   font-family: 'SFCompactRoundedSemibold';
   opacity: 0.6;
+  height: 74px;
 
 }
 
@@ -248,7 +250,7 @@ a {
   scroll-snap-align: start; /* Snap to the start of each section */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center;  
 }
 
 
@@ -267,14 +269,15 @@ a {
   transition: ease-in-out 0.5s;
   filter: blur(0px);
   z-index: 1;
-  margin-bottom: 30px;
+  /*margin-bottom: 30px;*/
   text-align: center;
 }
 
 /* Carousel container (visible area) */
-/* Carousel container (visible area) */
+
 #card-carousel {
-  height: 700px; /* Optional: Set a height for the carousel */
+  /*height: calc(100vh - 78px - 8px); /* Optional: Set a height for the carousel */
+  /*padding-top: calc((100vh - 78px - 8px) * 0.5);*/
   overflow-x: auto; /* Allow horizontal scrolling */
   overflow-y: hidden; /* Prevent vertical scrolling */
   white-space: nowrap; /* Prevent cards from wrapping */
@@ -282,7 +285,10 @@ a {
   position: relative;
   display: flex;
   align-items: center;
+  /*cursor: grab;*/
+  transition: scroll-behavior 0.5s ease; /* Smooth scrolling effect */
 }
+
 
 /* Carousel wrapper (scrollable area) */
 #carousel-wrapper {
@@ -293,12 +299,12 @@ a {
 /* Pagination Dots */
 #pagination-dots {
   position: relative; /* Change to relative positioning */
-  margin-top: 10px; /* Add some spacing between carousel and dots */
-  margin-bottom: 20px;
+  /*margin-top: 16px; /* Add some spacing between carousel and dots */
+  /*margin-bottom: 20px;*/
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .dot {
@@ -340,7 +346,7 @@ a {
 
 /* Text container below the video */
 .card-text {
-  font-size: 14pt;
+  font-size: 12pt;
   padding-top: 20px;
   color: white;
   display: flex;

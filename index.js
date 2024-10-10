@@ -79,6 +79,7 @@
                 document.getElementById("darken").style.backgroundColor = !animation.state ? 'rgba(18, 18, 18, 0)' : 'rgba(18, 18, 18, 0.8)'
                 document.getElementById("darken").style.zIndex = !animation.state ? 0 : 1;
                 document.getElementById("darken").style.backdropFilter = !animation.state ? 'blur(0px)' : 'blur(10px)'; // Adjust blur amount
+                document.getElementById("darken").style.WebkitBackdropFilter = !animation.state ? 'blur(0px)' : 'blur(10px)'; // Safari support
 
                 //document.getElementById("darken").style.filter = !animation.state ? 'blur(0px)' : 'blur(20px)';
                 //document.getElementById("keynote").style.zIndex = 0;
@@ -304,13 +305,34 @@
                 const cardCarousel = document.getElementById('card-carousel')                
                 cardCarousel.style.margin = width > 1792 ? `0 ${calculatePadding}px` : '0 7%'
                 const cardWidth = width > 1792 ? 462.6+50 : width*0.86 * .3
-
+                
                 const cards = document.getElementsByClassName('card')
                 for (let card of cards) {
                     card.style.width = `${cardWidth}px`
                     card.style.margin = width > 1792 ? '0 38.55px' : `${(width*0.86) * 0.025}px`
-                    card.style.height = `${cardWidth / 0.75}px`
+                    card.style.height = `${(cardWidth / 0.75) + 39}px`
                 }
+
+                const cardHeight = (cardWidth / 0.75) + 39;
+                const buttonHeight = 78;
+                const paginatedDots = 8;
+                /*const cardHeight = card.style.height; */
+                const margin = (width*0.86) * 0.025;
+                const trueCardHeight = cardHeight + margin + margin;
+
+                /*
+                const carouselWrapper = document.getElementById('carousel-wrapper');
+                const carouselWrapperHeight = carouselWrapper.style.height;
+                console.log("wrapper height: " + carouselWrapperHeight);
+                */
+
+                const cardCarouselTopHeight = (window.innerHeight - buttonHeight - paginatedDots - trueCardHeight) * 0.5;
+                cardCarousel.style.marginTop = `${cardCarouselTopHeight}px`;
+
+                const footerHeight = window.innerHeight - buttonHeight - paginatedDots - cardCarouselTopHeight - trueCardHeight;
+                const footer = document.getElementById('cardfooter');
+                
+                footer.style.height = `${footerHeight}px`;
             }
 
 /*
@@ -382,5 +404,4 @@ function scrollPrev() {
   carouselWrapper.scrollBy({ left: -450, behavior: 'smooth' });
 }
 
-            
-            
+
