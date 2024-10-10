@@ -76,7 +76,7 @@
                 animation.play()
                 document.getElementById("background-item").style.visibility = animation.state ? 'visible' : 'hidden'
                 document.getElementById("canvas").style.filter = !animation.state ? 'blur(0px)' : 'blur(20px)' //100px
-                document.getElementById("darken").style.backgroundColor = !animation.state ? 'rgba(18, 18, 18, 0)' : 'rgba(18, 18, 18, 0.8)'
+                document.getElementById("darken").style.backgroundColor = !animation.state ? 'rgba(18, 18, 18, 0)' : 'rgba(18, 18, 18, 0.88)'
                 document.getElementById("darken").style.zIndex = !animation.state ? 0 : 1;
                 document.getElementById("darken").style.backdropFilter = !animation.state ? 'blur(0px)' : 'blur(10px)'; // Adjust blur amount
                 document.getElementById("darken").style.WebkitBackdropFilter = !animation.state ? 'blur(0px)' : 'blur(10px)'; // Safari support
@@ -382,6 +382,72 @@ cardCarousel.addEventListener('scroll', () => {
         dots[i].classList.toggle('active', i === middleCardIndex); // Adjust for 1-based index
     }
 });
+// Example JavaScript to add scroll functionality (optional)
+const carouselWrapper = document.querySelector('#carousel-wrapper');
+
+let isDragging = false;
+let startPosition = 0;
+let currentScrollLeft = 0;
+let startPos = 0;
+
+// Mouse down event for dragging
+carouselWrapper.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startPosition = e.pageX - carouselWrapper.offsetLeft;
+    currentScrollLeft = cardCarousel.scrollLeft;
+    carouselWrapper.style.cursor = 'grabbing';
+});
+
+// Mouse move event for dragging
+carouselWrapper.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const x = e.pageX - carouselWrapper.offsetLeft;
+    const walk = (x - startPosition) * 1.5; // Increase the multiplier to drag faster
+    cardCarousel.scrollLeft = currentScrollLeft - walk;
+});
+
+// Mouse up and leave events to stop dragging
+carouselWrapper.addEventListener('mouseup', () => {
+    isDragging = false;
+    carouselWrapper.style.cursor = 'default';
+});
+
+carouselWrapper.addEventListener('mouseleave', () => {
+    isDragging = false;
+    carouselWrapper.style.cursor = 'default';
+});
+
+// Touch support for mobile devices
+carouselWrapper.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startPos = e.touches[0].pageX - carouselWrapper.offsetLeft;
+    currentScrollLeft = cardCarousel.scrollLeft;
+});
+
+carouselWrapper.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const x = e.touches[0].pageX - carouselWrapper.offsetLeft;
+    const walk = (x - startPos) * 1.5; // Adjust the multiplier for touch sensitivity
+    cardCarousel.scrollLeft = currentScrollLeft - walk;
+});
+
+carouselWrapper.addEventListener('touchend', () => {
+    isDragging = false;
+});
+
+// Scroll event to update pagination dots
+cardCarousel.addEventListener('scroll', () => {
+    const scrollLeft = cardCarousel.scrollLeft;
+    const cardWidth = cards[0].offsetWidth + parseFloat(getComputedStyle(cards[0]).marginRight);
+
+    // Calculate the middle index based on the scroll position
+    const middleCardIndex = Math.round(scrollLeft / cardWidth);
+
+    // Update the active dots
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle('active', i === middleCardIndex);
+    }
+});
 
 // Initial update to highlight the correct dot on page load
 dots[0]?.classList.add('active');
@@ -390,9 +456,6 @@ document.getElementById('scroll-button').addEventListener('click', () => {
     const scrollSection = document.getElementById('button-container');
     scrollSection.scrollIntoView({ behavior: 'smooth' });
 });
-
-// Example JavaScript to add scroll functionality (optional)
-const carouselWrapper = document.querySelector('.carousel-wrapper');
 
 // Scroll to the next set of cards
 function scrollNext() {

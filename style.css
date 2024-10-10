@@ -271,6 +271,7 @@ a {
   z-index: 1;
   /*margin-bottom: 30px;*/
   text-align: center;
+  color: #181818
 }
 
 /* Carousel container (visible area) */
@@ -287,6 +288,8 @@ a {
   align-items: center;
   /*cursor: grab;*/
   transition: scroll-behavior 0.5s ease; /* Smooth scrolling effect */
+  scroll-behavior: smooth; /* Added for smooth scrolling */
+  -webkit-overflow-scrolling: touch; /* Added to enable smooth touch scrolling for mobile */
 }
 
 
@@ -294,6 +297,10 @@ a {
 #carousel-wrapper {
   display: inline-flex; /* Align items horizontally */
   transition: transform 0.5s ease-in-out;
+}
+
+#carousel-wrapper:active {
+  cursor: grabbing; /* Change cursor when actively dragging */
 }
 
 /* Pagination Dots */
