@@ -467,4 +467,8 @@ function scrollPrev() {
   carouselWrapper.scrollBy({ left: -450, behavior: 'smooth' });
 }
 
-
+document.querySelectorAll('video').forEach(video => {
+    video.addEventListener('contextmenu', (event) => {
+        event.preventDefault(); // Prevent the context menu from showing
+    });
+});
