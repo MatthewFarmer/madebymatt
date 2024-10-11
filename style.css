@@ -163,7 +163,6 @@ nav .links {
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 #darken {
@@ -236,7 +235,7 @@ a {
   font-family: 'SFCompactRoundedSemibold';
   opacity: 0.6;
   height: 74px;
-
+  /*z-index: 100;*/
 }
 
 #scroll-container {

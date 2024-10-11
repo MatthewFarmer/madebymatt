@@ -4,7 +4,6 @@
 
                 var height = $(document.getElementById("scrolling-container")).scrollTop();
 
-
                 if (height > 885) {
                     document.getElementById("scrolling-container").scrollTop = 885;
                 }
@@ -71,9 +70,13 @@
 
             animation.state = false
             document.getElementById("bm").addEventListener("click", function() {
+                
+
+
                 animation.state = !animation.state
                 animation.state ? animation.setSpeed(1) : animation.setSpeed(-1)
                 animation.play()
+                document.getElementById('scroll-button').style.zIndex = !animation.state ? 100 : 0; //gallery button index
                 document.getElementById("background-item").style.visibility = animation.state ? 'visible' : 'hidden'
                 document.getElementById("canvas").style.filter = !animation.state ? 'blur(0px)' : 'blur(20px)' //100px
                 document.getElementById("darken").style.backgroundColor = !animation.state ? 'rgba(18, 18, 18, 0)' : 'rgba(18, 18, 18, 0.88)'
@@ -320,11 +323,10 @@
                 const margin = (width*0.86) * 0.025;
                 const trueCardHeight = cardHeight + margin + margin;
 
-                /*
-                const carouselWrapper = document.getElementById('carousel-wrapper');
-                const carouselWrapperHeight = carouselWrapper.style.height;
-                console.log("wrapper height: " + carouselWrapperHeight);
-                */
+                //Matt edits here
+                const canvas = document.getElementById('canvas');
+                const canvasHeight = canvas.style.height;
+                //console.log('canvasHeight: ' + canvasHeight);
 
                 const cardCarouselTopHeight = (window.innerHeight - buttonHeight - paginatedDots - trueCardHeight) * 0.5;
                 cardCarousel.style.marginTop = `${cardCarouselTopHeight}px`;
@@ -368,6 +370,8 @@
 const cardCarousel = document.getElementById('card-carousel');
 const cards = document.getElementsByClassName('card');
 const dots = document.getElementsByClassName('dot');
+
+
 
 cardCarousel.addEventListener('scroll', () => {
     const scrollLeft = cardCarousel.scrollLeft;
@@ -452,10 +456,21 @@ cardCarousel.addEventListener('scroll', () => {
 // Initial update to highlight the correct dot on page load
 dots[0]?.classList.add('active');
 
+
+
+
 document.getElementById('scroll-button').addEventListener('click', () => {
-    const scrollSection = document.getElementById('button-container');
-    scrollSection.scrollIntoView({ behavior: 'smooth' });
+    const scrollY = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    if (scrollY < scrollHeight) {
+        const scrollSection = document.getElementById('button-container');
+        scrollSection.scrollIntoView({ behavior: 'smooth' });
+    } else { //this might be broken but it works ¯\_(ツ)_/¯
+        const scrollSection = document.getElementById('scroll-container');
+        scrollSection.scrollIntoView({ behavior: 'smooth' });
+    }
 });
+
 
 // Scroll to the next set of cards
 function scrollNext() {
