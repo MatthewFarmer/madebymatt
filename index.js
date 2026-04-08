@@ -304,22 +304,29 @@
                 navBar.style.padding = width > 1792 ? `0 ${calculatePadding}px` : '0 7%'
                 backgroundItem.style.padding = width > 1792 ? `0 ${calculatePadding}px ` : '0 7%'
 
-                const cardCarousel = document.getElementById('card-carousel')                
+                const cardCarousel = document.getElementById('card-carousel')
                 cardCarousel.style.margin = width > 1792 ? `0 ${calculatePadding}px` : '0 7%'
-                const cardWidth = width > 1792 ? 462.6+50 : width*0.86 * .3
-                
+
+                // Cap card sizing at the 1792 breakpoint so the cards don't pop
+                // discontinuously above it. Above 1792 the carousel itself still
+                // grows via calculatePadding above, but the cards stop scaling.
+                // This also keeps `margin` consistent with what's actually applied
+                // to each card, so the trueCardHeight math below stays accurate
+                // and #card-section adds up to a full viewport at every width.
+                const sizingWidth = Math.min(width, 1792);
+                const cardWidth = sizingWidth * 0.86 * 0.3;
+                const margin = (sizingWidth * 0.86) * 0.025;
+
                 const cards = document.getElementsByClassName('card')
                 for (let card of cards) {
                     card.style.width = `${cardWidth}px`
-                    card.style.margin = width > 1792 ? '0 38.55px' : `${(width*0.86) * 0.025}px`
+                    card.style.margin = `${margin}px`
                     card.style.height = `${(cardWidth / 0.75) + 39}px`
                 }
 
                 const cardHeight = (cardWidth / 0.75) + 39;
                 const buttonHeight = 78;
                 const paginatedDots = 8;
-                /*const cardHeight = card.style.height; */
-                const margin = (width*0.86) * 0.025;
                 const trueCardHeight = cardHeight + margin + margin;
 
                 //Matt edits here
