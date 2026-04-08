@@ -498,13 +498,19 @@ const _CASE_STUDIES_URL = 'https://www.figma.com/proto/Zgexff3aMamOPtOgEc6fvW/Ma
 function _openPasswordModal() {
     _passwordOverlay.classList.add('active');
     _passwordModalOpen = true;
-    // Same blur/darken treatment the burger menu uses, so it inherits the existing
-    // 0.5s ease-in-out transitions on #canvas and #darken.
+    // Same blur treatment the burger menu uses (inherits the existing 0.5s
+    // ease-in-out transitions on #canvas and #darken), but the password modal
+    // uses a lighter black wash (40%) instead of the burger menu's 88%.
     document.getElementById('canvas').style.filter = 'blur(20px)';
-    document.getElementById('darken').style.backgroundColor = 'rgba(18, 18, 18, 0.88)';
-    document.getElementById('darken').style.zIndex = 1;
+    document.getElementById('darken').style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+    // Bump above #background-item (z-index: 3) so the scrolling container also
+    // gets covered when the modal is opened on top of it.
+    document.getElementById('darken').style.zIndex = 999;
     document.getElementById('darken').style.backdropFilter = 'blur(10px)';
     document.getElementById('darken').style.WebkitBackdropFilter = 'blur(10px)';
+    // Hide the GALLERY button so it can't peek through / be clicked behind the modal
+    document.getElementById('scroll-button').style.opacity = '0';
+    document.getElementById('scroll-button').style.pointerEvents = 'none';
     // Defer focus until after display:flex applies, otherwise some browsers ignore it
     requestAnimationFrame(() => _passwordInput.focus());
 }
@@ -518,6 +524,9 @@ function _closePasswordModal() {
     document.getElementById('darken').style.zIndex = 0;
     document.getElementById('darken').style.backdropFilter = 'blur(0px)';
     document.getElementById('darken').style.WebkitBackdropFilter = 'blur(0px)';
+    // Restore the GALLERY button (default CSS opacity is 0.6)
+    document.getElementById('scroll-button').style.opacity = '';
+    document.getElementById('scroll-button').style.pointerEvents = '';
 }
 
 _caseStudiesText.addEventListener('click', _openPasswordModal);
