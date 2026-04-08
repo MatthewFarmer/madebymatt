@@ -1,42 +1,61 @@
-        
+        // Set when the password modal is open. Used both by the modal handlers (to apply
+        // the canvas blur / darken backdrop) and by the blotter render loop (to freeze the
+        // "hello" animation while the modal is up).
+        var _passwordModalOpen = false;
+
         document.fonts.ready.then(function() {
-            document.getElementById("scrolling-container").addEventListener('scroll', function ( event ) {
+            // Cache the actual on-screen top of each <li> in the scrolling container.
+            // These are the scroll positions where each <li> snap-aligns to the top of the visible area.
+            // Computed once after fonts load, so the text wrap heights are accurate.
+            var _scrollContainer = document.getElementById("scrolling-container");
+            var _scrollContainerTop = _scrollContainer.getBoundingClientRect().top;
+            var _snapTops = Array.prototype.map.call(
+                _scrollContainer.querySelectorAll('#scrolling-text li'),
+                function(li) {
+                    return li.getBoundingClientRect().top - _scrollContainerTop + _scrollContainer.scrollTop;
+                }
+            );
+            // The 3rd <li> wraps to 4 lines instead of 3, so push its snap point down by one
+            // line height to match the CSS scroll-margin-top adjustment.
+            _snapTops[2] += 90;
+            // First snap position and the last useful one (the last <li> is always visible *below*
+            // the second-to-last when the second-to-last is at the top, so we don't scroll past that).
+            var _snapMin = _snapTops[0];
+            var _snapMax = _snapTops[_snapTops.length - 2];
+            // Midpoints between consecutive snap positions — used as thresholds for sentence highlight transitions.
+            var _snapMid = [];
+            for (var _i = 0; _i < _snapTops.length - 1; _i++) {
+                _snapMid.push((_snapTops[_i] + _snapTops[_i + 1]) / 2);
+            }
 
-                var height = $(document.getElementById("scrolling-container")).scrollTop();
+            _scrollContainer.addEventListener('scroll', function ( event ) {
 
-                if (height > 885) {
-                    document.getElementById("scrolling-container").scrollTop = 885;
+                var height = $(_scrollContainer).scrollTop();
+
+                if (height > _snapMax) {
+                    _scrollContainer.scrollTop = _snapMax;
                 }
 
-                if (height < 75) {
-                    document.getElementById("scrolling-container").scrollTop = 75;
+                if (height < _snapMin) {
+                    _scrollContainer.scrollTop = _snapMin;
                 }
 
-                var isSentenceOne = true;
-                var isSentenceTwo = true;
-                var isSentenceThree = true;
-                var isSentenceFour = true;
+                var isSentenceOne = false;
+                var isSentenceTwo = false;
+                var isSentenceThree = false;
+                var isSentenceFour = false;
+                var isSentenceFive = false;
 
-                if (height <= 75) {
+                if (height < _snapMid[0]) {
                     isSentenceOne = true;
-                    isSentenceTwo = false;
-                    isSentenceThree = false;
-                    isSentenceFour = false;
-                } else if (height == 345) {
-                    isSentenceOne = false;
+                } else if (height < _snapMid[1]) {
                     isSentenceTwo = true;
-                    isSentenceThree = false;
-                    isSentenceFour = false;
-                } else if (height == 615) {
-                    isSentenceOne = false;
-                    isSentenceTwo = false;
+                } else if (height < _snapMid[2]) {
                     isSentenceThree = true;
-                    isSentenceFour = false;
-                } else if (height >= 885) {
-                    isSentenceOne = false;
-                    isSentenceTwo = false;
-                    isSentenceThree = false;
+                } else if (height < _snapMid[3]) {
                     isSentenceFour = true;
+                } else {
+                    isSentenceFive = true;
                 }
 
                 document.getElementsByClassName("sentenceOne")[0].style.color = isSentenceOne ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
@@ -51,12 +70,8 @@
                 document.getElementsByClassName("sentenceFour")[0].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
                 document.getElementsByClassName("sentenceFour")[1].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
 
-                document.getElementsByTagName("a")[1].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                document.getElementsByTagName("a")[2].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                document.getElementsByTagName("a")[3].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                document.getElementsByTagName("a")[4].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                document.getElementsByTagName("a")[5].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
-                document.getElementsByTagName("a")[6].style.color = isSentenceFour ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
+                document.getElementsByClassName("sentenceFive")[0].style.color = isSentenceFive ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
+                document.getElementsByClassName("sentenceFive")[1].style.color = isSentenceFive ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.1)';
 
             }, false);
 
@@ -89,33 +104,24 @@
                 //document.getElementById("keynote").style.filter = !animation.state ? 'blur(0px)' : 'blur(4px)' //100px
                 //document.getElementById("keynote").style.color = animation.state ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.1)'
 
-                var preHeight = $(document.getElementById("scrolling-container")).scrollTop();
+                var preHeight = $(_scrollContainer).scrollTop();
 
-                var isSentenceOne = true;
+                var isSentenceOne = false;
                 var isSentenceTwo = false;
                 var isSentenceThree = false;
                 var isSentenceFour = false;
+                var isSentenceFive = false;
 
-                if (preHeight == 75) {
+                if (preHeight < _snapMid[0]) {
                     isSentenceOne = true;
-                    isSentenceTwo = false;
-                    isSentenceThree = false;
-                    isSentenceFour = false;
-                } else if (preHeight == 345) {
-                    isSentenceOne = false;
+                } else if (preHeight < _snapMid[1]) {
                     isSentenceTwo = true;
-                    isSentenceThree = false;
-                    isSentenceFour = false;
-                } else if (preHeight == 615) {
-                    isSentenceOne = false;
-                    isSentenceTwo = false;
+                } else if (preHeight < _snapMid[2]) {
                     isSentenceThree = true;
-                    isSentenceFour = false;
-                } else if (preHeight == 885) {
-                    isSentenceOne = false;
-                    isSentenceTwo = false;
-                    isSentenceThree = false;
+                } else if (preHeight < _snapMid[3]) {
                     isSentenceFour = true;
+                } else {
+                    isSentenceFive = true;
                 }
 
                 if (isSentenceOne) {
@@ -145,24 +151,17 @@
                 if (isSentenceFour) {
                     document.getElementsByClassName("sentenceFour")[0].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByClassName("sentenceFour")[1].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-
-                    document.getElementsByTagName("a")[1].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[2].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[3].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[4].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[5].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[6].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
-                        
                 } else {
                     document.getElementsByClassName("sentenceFour")[0].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
                     document.getElementsByClassName("sentenceFour")[1].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
+                }
 
-                    document.getElementsByTagName("a")[1].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[2].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[3].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[4].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[5].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
-                    document.getElementsByTagName("a")[6].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
+                if (isSentenceFive) {
+                    document.getElementsByClassName("sentenceFive")[0].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
+                    document.getElementsByClassName("sentenceFive")[1].style.color = animation.state ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)';
+                } else {
+                    document.getElementsByClassName("sentenceFive")[0].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
+                    document.getElementsByClassName("sentenceFive")[1].style.color = animation.state ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)';
                 }
 
             })
@@ -274,7 +273,7 @@
                     const render = () => {
                         const docScrolls = {left : body.scrollLeft + docEl.scrollLeft, top : body.scrollTop + docEl.scrollTop};
                         const relmousepos = {x : mousePos.x - docScrolls.left, y : mousePos.y - docScrolls.top };
-                        const mouseDistance = !animation.state ? MathUtils.distance(lastMousePosition.x, relmousepos.x, lastMousePosition.y, relmousepos.y):  0
+                        const mouseDistance = (!animation.state && !_passwordModalOpen) ? MathUtils.distance(lastMousePosition.x, relmousepos.x, lastMousePosition.y, relmousepos.y):  0
 
                         volatility = MathUtils.lerp(volatility, Math.min(MathUtils.lineEq(0.9, 0, 100, 0, 2*mouseDistance),0.9), 0.05);
 
@@ -486,4 +485,67 @@ document.querySelectorAll('video').forEach(video => {
     video.addEventListener('contextmenu', (event) => {
         event.preventDefault(); // Prevent the context menu from showing
     });
+});
+
+// Password modal: clicking [Full Case Studies] blurs the page and shows a password prompt.
+// Front-end-only check — this is just a small speed bump for recruiters, not real security.
+const _caseStudiesText = document.getElementById('case-studies-text');
+const _passwordOverlay = document.getElementById('password-modal-overlay');
+const _passwordInput = document.getElementById('password-input');
+const _CASE_STUDIES_PASSWORD = 'matt-farmer';
+const _CASE_STUDIES_URL = 'https://www.figma.com/proto/Zgexff3aMamOPtOgEc6fvW/Matt-s-Portfolio-Presentation-2026?page-id=4001%3A31012&node-id=4001-34553&viewport=-31728%2C-4943%2C0.49&t=mmjSmIwkdoOWq05e-1&scaling=contain&content-scaling=fixed';
+
+function _openPasswordModal() {
+    _passwordOverlay.classList.add('active');
+    _passwordModalOpen = true;
+    // Same blur/darken treatment the burger menu uses, so it inherits the existing
+    // 0.5s ease-in-out transitions on #canvas and #darken.
+    document.getElementById('canvas').style.filter = 'blur(20px)';
+    document.getElementById('darken').style.backgroundColor = 'rgba(18, 18, 18, 0.88)';
+    document.getElementById('darken').style.zIndex = 1;
+    document.getElementById('darken').style.backdropFilter = 'blur(10px)';
+    document.getElementById('darken').style.WebkitBackdropFilter = 'blur(10px)';
+    // Defer focus until after display:flex applies, otherwise some browsers ignore it
+    requestAnimationFrame(() => _passwordInput.focus());
+}
+
+function _closePasswordModal() {
+    _passwordOverlay.classList.remove('active');
+    _passwordInput.value = '';
+    _passwordModalOpen = false;
+    document.getElementById('canvas').style.filter = 'blur(0px)';
+    document.getElementById('darken').style.backgroundColor = 'rgba(18, 18, 18, 0)';
+    document.getElementById('darken').style.zIndex = 0;
+    document.getElementById('darken').style.backdropFilter = 'blur(0px)';
+    document.getElementById('darken').style.WebkitBackdropFilter = 'blur(0px)';
+}
+
+_caseStudiesText.addEventListener('click', _openPasswordModal);
+
+// Click on the dimmed backdrop (but not the modal itself) closes
+_passwordOverlay.addEventListener('click', (e) => {
+    if (e.target === _passwordOverlay) {
+        _closePasswordModal();
+    }
+});
+
+// Escape key closes
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && _passwordOverlay.classList.contains('active')) {
+        _closePasswordModal();
+    }
+});
+
+// Enter key submits the password
+_passwordInput.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    if (_passwordInput.value === _CASE_STUDIES_PASSWORD) {
+        window.location.href = _CASE_STUDIES_URL;
+    } else {
+        _passwordInput.classList.remove('shake');
+        // Force reflow so the animation restarts even on consecutive failed attempts
+        void _passwordInput.offsetWidth;
+        _passwordInput.classList.add('shake');
+        _passwordInput.value = '';
+    }
 });

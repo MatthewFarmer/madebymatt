@@ -17,6 +17,7 @@
         <div class="logo"><a href="http://madebymatt.io/"><img src="Matt Logo.svg" height="20%" /></a></div>
         <ul class="links">
             <div id="fontload"> . </div>
+            <div id="case-studies-text">Case studies</div>
             <div id="bm"></div>
         </ul>
         
@@ -26,8 +27,6 @@
             <div class="line"></div>
         </label>
     </nav>
-    
-    <!--<a href="https://[InsertGoogleDocs File]" target="_blank" rel="noopener noreferrer" id ="keynote">[Portfolio Keynote Download]</a>-->
     
     <div id="darken"> </div>
     <div id="scroll-container">
@@ -43,6 +42,13 @@
     <!-- Card Carousel Section -->
         <div id="card-carousel">
             <div id="carousel-wrapper">
+                <a class="card" href="https://trydaily.ai" target="_blank" rel="noopener noreferrer" style="color: inherit;">
+                    <video src="Daily Card.mp4" autoplay loop muted></video>
+                    <div class="card-text">
+                        <span class="title">Daily</span>
+                        <span class="description"> | iOS app | <span style="text-decoration: underline;">Website</span></span>
+                    </div>
+                </a>
                 <div class="card">
                     <video src="Asana Card.mp4" autoplay loop muted></video>
                     <div class="card-text">
@@ -92,6 +98,7 @@
             <span class="dot" data-index="2"></span>
             <span class="dot" data-index="3"></span>
             <span class="dot" data-index="4"></span>
+            <span class="dot" data-index="5"></span>
         </div>
         <div id="cardfooter">
 
@@ -104,16 +111,18 @@
             <ul id="scrolling-text">
                 <li><br><span class="sentenceOne"> Matt is an American designer, based in New York City, </span></li>
                 <li><span class="sentenceOne"> currently crafting experiences <br>at Asana.</span>
-                    <span class="sentenceTwo">Previously, he was designing end-to-end products</span></li>
-                <li><span class="sentenceTwo">for Route, Uber, and Postmates.</span> 
-                    <span class="sentenceThree">Matt holds degrees from the University of Washington in </span></li>
-                <li><span class="sentenceThree">both Visual Communication Design and Informatics. </span>
-                <br><span class="sentenceFour">You can find more of him on:</span></li>
-                <li><span class="sentenceFour"><a href="https://www.instagram.com/matt.arw/?hl=en" target="_blank" rel="noopener noreferrer">Instagram</a>, 
-                                            <a href="https://medium.com/@matthewjamesfarmer" target="_blank" rel="noopener noreferrer">Medium</a>, 
+                    <span class="sentenceTwo">He is currently tinkering with Claude Code, </span></li>
+                <li><span class="sentenceTwo">building <a href="https://trydaily.ai" target="_blank" rel="noopener noreferrer">Daily</a>, an AI-native productivity app for iOS.</span>
+                    <span class="sentenceThree">Previously, he was designing end-to-end products</span></li>
+                <li><span class="sentenceThree">for Route, Uber, and Postmates.</span>
+                    <span class="sentenceFour">Matt holds degrees from the University of Washington in </span></li>
+                <li><span class="sentenceFour">both Visual Communication Design and Informatics. </span>
+                <br><span class="sentenceFive">You can find more of him on:</span></li>
+                <li><span class="sentenceFive"><a href="https://www.instagram.com/matt.arw/?hl=en" target="_blank" rel="noopener noreferrer">Instagram</a>,
+                                            <a href="https://medium.com/@matthewjamesfarmer" target="_blank" rel="noopener noreferrer">Medium</a>,
                                             <a href="https://dribbble.com/MatthewFarmer" target="_blank" rel="noopener noreferrer">Dribbble</a>,
-                                            <a href="https://twitter.com/mattjamesfarmer" target="_blank" rel="noopener noreferrer">Twitter</a>, 
-                                            <a href="mailto:MatthewJamesFarmer@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>, 
+                                            <a href="https://twitter.com/mattjamesfarmer" target="_blank" rel="noopener noreferrer">Twitter</a>,
+                                            <a href="mailto:MatthewJamesFarmer@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>,
                                             <a href="Matt Farmer Resume.pdf" target="_blank" rel="noopener noreferrer"> Resume.</a></span></li>
 
 
@@ -125,6 +134,21 @@
             </ul>
         </div>
       </div>
+    <div id="password-modal-overlay">
+        <div id="password-modal">
+            <input type="password" id="password-input" placeholder="Password" autocomplete="off">
+            <div id="password-modal-hints">
+                <div class="hint">
+                    <kbd>Esc</kbd>
+                    <span>to Exit</span>
+                </div>
+                <div class="hint">
+                    <kbd>Return</kbd>
+                    <span>to Submit</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./index.js"></script>
         
     

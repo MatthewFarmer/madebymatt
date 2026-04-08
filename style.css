@@ -44,6 +44,13 @@ body {
   font-weight: 400;
 }
 
+@font-face {
+  font-family: 'SFMono';
+  src: url(SF-Mono-Regular.otf);
+  font-style: normal;
+  font-weight: 400;
+}
+
 #fontload {
   font-family: 'WienModern';
   color: #121212;
@@ -132,7 +139,7 @@ nav .links {
   margin-top:20px;
   overflow:scroll;
   margin: 0;
-  
+
   transition: ease-in-out 0.5s;
 
   color:rgba(255, 255, 255, 0);
@@ -191,6 +198,10 @@ nav .links {
   transition: ease-in-out 0.3s;
 }
 
+.sentenceFive {
+  transition: ease-in-out 0.3s;
+}
+
 ul {
   list-style-type: none;
 }
@@ -201,12 +212,31 @@ li {
   letter-spacing: -1.45px;
   line-height: 90px;
   scroll-snap-align: start;
-  
+
+}
+
+/* The 3rd <li> wraps to 4 lines instead of 3 because of the new sentence —
+   push its snap point down by one line so it locks where it visually feels right. */
+#scrolling-text li:nth-child(3) {
+  scroll-margin-top: -90px;
 }
 
 a {
   text-decoration: none;
   transition: ease-in-out 0.3s;
+}
+
+/* Links inside the scrolling sentences inherit their parent span's color
+   (so they fade with the sentence highlight animation) and underline on hover.
+   transition: none disables the inherited 0.3s transition so the underline
+   appears instantly instead of fading in. */
+#scrolling-text a {
+  color: inherit;
+  transition: none;
+}
+
+#scrolling-text a:hover {
+  text-decoration: underline;
 }
 #canvasSection {
   height: calc(100vh - 78px);
@@ -217,7 +247,116 @@ a {
 #button-container {
   display: flex;          /* Use flexbox */
   justify-content: center; /* Center the button horizontally */
+  position: relative;     /* anchor for absolutely-positioned children */
 }
+#case-studies-text {
+  color: white;
+  font-size: 14px;
+  font-family: 'SFCompactRoundedSemibold';
+  opacity: 1;
+  cursor: pointer;
+  margin-right: 24px;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+#case-studies-text:hover {
+  opacity: 0.6;
+}
+
+/* Password modal — the blur/darken backdrop is provided by #darken (driven from JS),
+   so this overlay only needs to position the modal content centered on top.
+   Opacity/visibility (instead of display) so we can fade the modal in alongside the
+   0.5s blur transition on #canvas and #darken. */
+#password-modal-overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+}
+
+#password-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease-in-out, visibility 0s linear 0s;
+}
+
+#password-modal {
+  text-align: center;
+  color: white;
+  font-family: 'SFCompactRoundedSemibold';
+  min-width: 320px;
+}
+
+#password-input {
+  width: 100%;
+  padding: 14px 18px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: white;
+  font-size: 16px;
+  font-family: 'SFCompactRoundedSemibold';
+  outline: none;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#password-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+#password-modal-hints {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+#password-modal-hints .hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#password-modal-hints kbd {
+  background-color: rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 5px;
+  color: white;
+  font-family: 'SFMono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1;
+}
+
+#password-modal-hints span {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'SFCompactMedium', -apple-system, sans-serif;
+}
+
+@keyframes password-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+#password-input.shake {
+  animation: password-shake 0.4s ease-in-out;
+}
+
 #scroll-button {
   margin: 0 auto; /* Push button to the bottom */
   background-color: transparent;
@@ -249,7 +388,7 @@ a {
   scroll-snap-align: start; /* Snap to the start of each section */
   display: flex;
   flex-direction: column;
-  justify-content: center;  
+  justify-content: center;
 }
 
 
@@ -280,6 +419,7 @@ a {
   /*padding-top: calc((100vh - 78px - 8px) * 0.5);*/
   overflow-x: auto; /* Allow horizontal scrolling */
   overflow-y: hidden; /* Prevent vertical scrolling */
+  overscroll-behavior-x: none; /* Disable horizontal rubber-band at the ends of the list */
   white-space: nowrap; /* Prevent cards from wrapping */
   scroll-snap-type: x mandatory; /* Enable snapping */
   position: relative;
@@ -330,7 +470,7 @@ a {
   /*height: 647px;*/
   background-color: transparent;
   overflow: visible;
-  /*box-shadow: 
+  /*box-shadow:
     -20px -20px 80px rgba(255, 255, 255, 0.1),
     40px 40px 80px rgba(0, 0, 0, 0.16);    */
   display: flex;
