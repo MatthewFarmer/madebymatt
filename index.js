@@ -500,7 +500,7 @@ const _caseStudiesText = document.getElementById('case-studies-text');
 const _passwordOverlay = document.getElementById('password-modal-overlay');
 const _passwordInput = document.getElementById('password-input');
 const _CASE_STUDIES_PASSWORD = 'matt-farmer';
-const _CASE_STUDIES_URL = 'https://www.figma.com/proto/Zgexff3aMamOPtOgEc6fvW/Matt-s-Portfolio-Presentation-2026?page-id=4001%3A31012&node-id=4001-34553&viewport=-31728%2C-4943%2C0.49&t=mmjSmIwkdoOWq05e-1&scaling=contain&content-scaling=fixed';
+const _CASE_STUDIES_URL = 'https://www.figma.com/proto/nnXVFjE6PicdtwqifRqChF/Matt-Public-Portfolio-Presentation?node-id=1-27359&viewport=212%2C179%2C0.06&t=WyAZjPtZivkqimF8-1&scaling=contain&content-scaling=fixed&page-id=0%3A1';
 
 function _openPasswordModal() {
     _passwordOverlay.classList.add('active');
